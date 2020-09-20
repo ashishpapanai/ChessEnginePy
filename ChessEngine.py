@@ -21,11 +21,25 @@ class GameState():
         self.whiteToMove = True
         self.moveLog = []
 
+    """
+    MakeMove takes move as  a parameter an makes a move to the opted piece (doesn't work for castling, pawn promotion
+    or en-passant
+    """
+
     def makeMove(self, move):
         self.board[move.startRow][move.startCol] = "--"
         self.board[move.endRow][move.endCol] = move.pieceMoved
         self.moveLog.append(move) # log the move so that it can be undone later
-        self.whiteToMove = not self.whiteToMove
+        self.whiteToMove = not self.whiteToMove #swaps player
+    """
+    Undo the last move
+    """
+    def UndoMove(self):
+        if len(self.moveLog) != 0:
+            move = self.moveLog.pop()
+            self.board[move.startRow][move.startCol] = move.pieceMoved
+            self.board[move.endRow][move.endCol] = move.pieceCaptured
+            self.whiteToMove = not self.whiteToMove #swaps player back
 
 class Move:
     ranksToRows = {"1": 7, "2": 6, "3": 5, "4": 4, "5": 3, "6": 2, "7": 1, "8": 0}
