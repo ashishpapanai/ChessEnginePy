@@ -41,6 +41,46 @@ class GameState():
             self.board[move.endRow][move.endCol] = move.pieceCaptured
             self.whiteToMove = not self.whiteToMove #swaps player back
 
+    """
+    All moves considering checks
+    """
+    def getValidMoves(self):
+        return self.getALlPossibleMoves() #ignoring checks
+
+    """
+    All moves without considering checks
+    """
+    def getALlPossibleMoves(self):
+        moves = [Move((6, 4), (4, 4), self.board)]
+        for r in range(len(self.board)): # number of rows
+            for c in range(len(self.board)): # number of column
+                turn = self.board[r][c][0]
+                if(turn == 'w' and self.whiteToMove) and (turn == 'b' and not self.whiteToMove):
+                    piece = self.board[r][c][1]
+                    if piece == 'p':
+                        self.getPawnMoves(r, c, moves)
+                    elif piece == 'R':
+                        self.getRookMoves(r, c, moves)
+        return moves
+
+
+    """
+    Gets all pawn moves for pawn located at row, column and add these moves to the list
+    """
+    def getPawnMoves(self, r, c, moves):
+        pass
+
+    """
+        Gets all rook moves for pawn located at row, column and add these moves to the list
+    """
+
+    def getRookMoves(self, r, c, moves):
+        pass
+
+
+
+
+
 class Move:
     ranksToRows = {"1": 7, "2": 6, "3": 5, "4": 4, "5": 3, "6": 2, "7": 1, "8": 0}
     rowsToRanks = {v: k for k, v in ranksToRows.items()}
@@ -53,6 +93,19 @@ class Move:
         self.endCol = endSq[1]
         self.pieceMoved = Board[self.startRow][self.startCol]
         self.pieceCaptured = Board[self.endRow][self.endCol]
+        self.moveId = self.startRow*1000 + self.startCol*100 + self.endRow*10 + self.endCol
+        print(self.moveId)
+
+
+    """
+    Overriding the equals method
+    """
+
+    def __eq__(self, other):
+        if(isinstance(other, Move)):
+            return  self.moveId == other.moveId
+        return False
+
 
 
     def getChessNotation(self):
