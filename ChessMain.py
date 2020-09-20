@@ -39,10 +39,31 @@ def main():
     gs = ChessEngine.GameState()
     loadImages()
     running = True
+    sqSelected = ()  #keeps track of last click of the user, Tuple
+    playerClicks = []  #keeps a track of player clicks, Two tuples. (
     while running:
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
+            elif e.type == p.MOUSEBUTTONDOWN:
+                location = p.mouse.get_pos() # x,y cords of mouse click
+                col = location[0] // SQ_SIZE
+                row = location[1] // SQ_SIZE
+                if sqSelected == (row, col):
+                    sqSelected = () # deselect
+                    playerClicks = [] # clear player clicks
+                else:
+                    sqSelected = (row, col)
+                    playerClicks.append(sqSelected)
+
+                if len(playerClicks) == 2:
+                    move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
+                    print(move.getChessNotation())
+                    gs.makeMove(move)
+                    sqSelected = () # reset clicks
+                    playerClicks = []
+
+
         drawGameState(screen, gs)
         clock.tick(MAX_FPS)
         p.display.flip()
