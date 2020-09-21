@@ -75,23 +75,25 @@ class GameState():
                 if r == 6 and self.board[r-2][c] == "--": # 2 squares leap
                     moves.append((Move((r, c), (r-2, c), self.board)))
             if c-1 >= 0:
-                if self.board[r-1][c-1][0] == 'b': # enemy piece to capture
+                if self.board[r-1][c-1][0] == 'b': # enemy piece to capture left
                     moves.append(Move((r, c ), (r - 1, c - 1), self.board))
             if c+1 <= 7:
-                if self.board[r-1][c+1][0] == 'b': # enemy piece to capture
+                if self.board[r-1][c+1][0] == 'b': # enemy piece to capture right
                     moves.append(Move((r, c), (r - 1, c + 1), self.board))
 
         else:
-            if self.board[r-1][c] == "--": # black pawn moves
-                moves.append(Move((r, c), (r-1, c), self.board))
-                if r == 6 and self.board[r-2][c] == "--": # 2 squares leap
-                    moves.append((Move((r, c), (r-2, c), self.board)))
+            if self.board[r+1][c] == "--": # black pawn moves
+                moves.append(Move((r, c), (r+1, c), self.board))
+                if r == 1 and self.board[r+2][c] == "--": # 2 squares leap
+                    moves.append((Move((r, c), (r+2, c), self.board)))
             if c-1 >= 0:
-                if self.board[r-1][c-1][0] == 'w': # enemy piece to capture
-                    moves.append(Move((r, c ), (r - 1, c - 1), self.board))
+                if self.board[r+1][c-1][0] == 'w': # enemy piece to capture left
+                    moves.append(Move((r, c ), (r + 1, c - 1), self.board))
             if c+1 <= 7:
-                if self.board[r-1][c+1][0] == 'w': # enemy piece to capture
-                    moves.append(Move((r, c), (r - 1, c + 1), self.board))
+                if self.board[r+1][c+1][0] == 'w': # enemy piece to capture right
+                    moves.append(Move((r, c), (r + 1, c + 1), self.board))
+
+        # To add: Pawn promotions
 
 
 
@@ -129,7 +131,7 @@ class GameState():
 
     def getQueenMoves(self, r, c, moves):
         pass
-    
+
 
 class Move:
     ranksToRows = {"1": 7, "2": 6, "3": 5, "4": 4, "5": 3, "6": 2, "7": 1, "8": 0}
