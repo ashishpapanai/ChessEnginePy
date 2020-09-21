@@ -18,6 +18,10 @@ class GameState():
             ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
             ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"]
         ]
+
+        self.moveFunctions = {"p": self.getPawnMoves, "Q": self.getQueenMoves,
+                             "B": self.getBishopMoves, "R": self.getRookMoves, "N": self.getKnightMoves, "K": self.getKingMoves}
+
         self.whiteToMove = True
         self.moveLog = []
 
@@ -51,16 +55,13 @@ class GameState():
     All moves without considering checks
     """
     def getALlPossibleMoves(self):
-        moves = [Move((6, 4), (4, 4), self.board)]
+        moves = []
         for r in range(len(self.board)): # number of rows
             for c in range(len(self.board)): # number of column
                 turn = self.board[r][c][0]
-                if(turn == 'w' and self.whiteToMove) and (turn == 'b' and not self.whiteToMove):
+                if(turn == 'w' and self.whiteToMove) or (turn == 'b' and not self.whiteToMove):
                     piece = self.board[r][c][1]
-                    if piece == 'p':
-                        self.getPawnMoves(r, c, moves)
-                    elif piece == 'R':
-                        self.getRookMoves(r, c, moves)
+                    self.moveFunctions[piece](r, c, moves) #calls appropiate function
         return moves
 
 
@@ -68,18 +69,67 @@ class GameState():
     Gets all pawn moves for pawn located at row, column and add these moves to the list
     """
     def getPawnMoves(self, r, c, moves):
-        pass
+        if self.whiteToMove:
+            if self.board[r-1][c] == "--": # white pawn moves
+                moves.append(Move((r, c), (r-1, c), self.board))
+                if r == 6 and self.board[r-2][c] == "--": # 2 squares leap
+                    moves.append((Move((r, c), (r-2, c), self.board)))
+            if c-1 >= 0:
+                if self.board[r-1][c-1][0] == 'b': # enemy piece to capture
+                    moves.append(Move((r, c ), (r - 1, c - 1), self.board))
+            if c+1 <= 7:
+                if self.board[r-1][c+1][0] == 'b': # enemy piece to capture
+                    moves.append(Move((r, c), (r - 1, c + 1), self.board))
+
+        else:
+            if self.board[r-1][c] == "--": # black pawn moves
+                moves.append(Move((r, c), (r-1, c), self.board))
+                if r == 6 and self.board[r-2][c] == "--": # 2 squares leap
+                    moves.append((Move((r, c), (r-2, c), self.board)))
+            if c-1 >= 0:
+                if self.board[r-1][c-1][0] == 'w': # enemy piece to capture
+                    moves.append(Move((r, c ), (r - 1, c - 1), self.board))
+            if c+1 <= 7:
+                if self.board[r-1][c+1][0] == 'w': # enemy piece to capture
+                    moves.append(Move((r, c), (r - 1, c + 1), self.board))
+
+
 
     """
-        Gets all rook moves for pawn located at row, column and add these moves to the list
+        Gets all rook moves for rook located at row, column and add these moves to the list
     """
 
     def getRookMoves(self, r, c, moves):
         pass
 
+    """
+            Gets all knight moves for knight located at row, column and add these moves to the list
+    """
 
+    def getKnightMoves(self, r, c, moves):
+        pass
 
+    """
+            Gets all Bishop moves for bishop located at row, column and add these moves to the list
+    """
 
+    def getBishopMoves(self, r, c, moves):
+        pass
+
+    """
+            Gets all King moves for King located at row, column and add these moves to the list
+    """
+
+    def getKingMoves(self, r, c, moves):
+        pass
+
+    """
+            Gets all rook moves for Queen located at row, column and add these moves to the list
+    """
+
+    def getQueenMoves(self, r, c, moves):
+        pass
+    
 
 class Move:
     ranksToRows = {"1": 7, "2": 6, "3": 5, "4": 4, "5": 3, "6": 2, "7": 1, "8": 0}
@@ -94,7 +144,6 @@ class Move:
         self.pieceMoved = Board[self.startRow][self.startCol]
         self.pieceCaptured = Board[self.endRow][self.endCol]
         self.moveId = self.startRow*1000 + self.startCol*100 + self.endRow*10 + self.endCol
-        print(self.moveId)
 
 
     """
