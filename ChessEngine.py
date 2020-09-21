@@ -102,21 +102,60 @@ class GameState():
     """
 
     def getRookMoves(self, r, c, moves):
-        pass
+        directions = ((-1, 0), (0, -1), (1, 0), (0, 1)) #up left down right moves
+        enemyColor = "b" if self.whiteToMove else "w"
+        for d in directions:
+            for i in range(1,8):
+                endRow = r + d[0]*i
+                endCol = c + d[1]*i
+                if 0 <= endRow < 8 and 0 <= endCol < 8: # on board
+                    endPiece = self.board[endRow][endCol]
+                    if endPiece == "--": # valid empty space
+                        moves.append(Move((r, c), (endRow, endCol), self.board))
+                    elif endPiece[0] == enemyColor: # capture enemy piece
+                        moves.append(Move((r, c), (endRow, endCol), self.board))
+                    else: # friendly piece skip
+                        break
+                else: # off board
+                    break
 
     """
             Gets all knight moves for knight located at row, column and add these moves to the list
     """
 
     def getKnightMoves(self, r, c, moves):
-        pass
+        knightMoves = ((-2, -1), (-2, 1), (-1, -2), (-1, 2), (1, -2), (1, 2), (2, -1), (2, 1))  # L shaped movements
+        allyColor = "w" if self.whiteToMove else "b"
+        for m in knightMoves:
+            endRow = r + m[0]
+            endCol = c + m[1]
+            if 0 <= endRow < 8 and 0 <= endCol < 8:  # on board
+                endPiece = self.board[endRow][endCol]
+                if endPiece[0] != allyColor: #enemy piece
+                    moves.append(Move((r, c), (endRow, endCol), self.board))
 
     """
             Gets all Bishop moves for bishop located at row, column and add these moves to the list
     """
 
     def getBishopMoves(self, r, c, moves):
-        pass
+        directions = ((-1, -1), (-1, 1), (1, -1), (1, 1))  # diagonal movement
+        enemyColor = "b" if self.whiteToMove else "w"
+        for d in directions:
+            for i in range(1, 8): # bishop can move maximum 7 squares
+                endRow = r + d[0] * i
+                endCol = c + d[1] * i
+                if 0 <= endRow < 8 and 0 <= endCol < 8:  # on board
+                    endPiece = self.board[endRow][endCol]
+                    if endPiece == "--":  # valid empty space
+                        moves.append(Move((r, c), (endRow, endCol), self.board))
+                    elif endPiece[0] == enemyColor:  # capture enemy piece
+                        moves.append(Move((r, c), (endRow, endCol), self.board))
+                    else:  # friendly piece skip
+                        break
+                else:  # off board
+                    break
+
 
     """
             Gets all King moves for King located at row, column and add these moves to the list
