@@ -3,7 +3,7 @@ This file will handle current games, It's the main driver file and this will tak
 """
 
 import pygame as p
-from Chess import ChessEngine
+import ChessEngine
 
 WIDTH = HEIGHT = 512
 # because of low resolution images

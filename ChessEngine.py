@@ -92,7 +92,7 @@ class GameState():
                     validSquares = [(checkRow, checkCol)]
                 else:
                     for i in range(1, 8):
-                        validSquare = (kingRow + check[2] * i, kingRow + check[3] * i)
+                        validSquare = (kingRow + check[2] * i, kingCOl + check[3] * i)
                         validSquares.append(validSquare)
                         if validSquare[0] == checkRow and validSquare[1] == checkCol:
                             break
